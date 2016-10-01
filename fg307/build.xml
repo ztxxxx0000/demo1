@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+<project name="Flash2createjs compress project" basedir="." default="createjsCompile">
+    <taskdef name="CompressionPNG" classname="org.flash2x.CompressionPNG" classpath="${basedir}/tools/flash2x.jar"/>
+    <taskdef name="jscomp" classname="com.google.javascript.jscomp.ant.CompileTask"
+             classpath="${basedir}/tools/compiler.jar"/>
+    <target name="createjsCompile">
+        <delete dir="${basedir}/released"/>
+        <copy toDir="${basedir}/released/">
+            <fileset dir="${basedir}">
+                <include name="libs/**/*.js" />
+                <include name="index.html" />
+                <include name="resource/**/*" />
+            </fileset>
+        </copy>
+        <!-- 先替换掉空拍及换行-->
+        <replaceregexp encoding="utf-8" flags="g"  byline="false">
+            <regexp pattern='[\s\r\n\t]+'/>
+            <substitution expression="" />
+            <fileSet dir="${basedir}/released">
+                <include name="resource/*/*.res.json"/>
+            </fileSet>
+        </replaceregexp>
+        <!-- 再来将合并后多于的js文件引用去掉-->
+        <replaceregexp encoding="utf-8" flags="g"  byline="true">
+            <regexp pattern=',?\{"src":"src\/.*?","type":"javascript"\}'/>
+            <substitution expression="" />
+            <fileSet dir="${basedir}/released">
+                <include name="resource/*/*.res.json"/>
+            </fileSet>
+        </replaceregexp>
+        <replaceregexp encoding="utf-8" flags="g"  byline="true">
+            <regexp pattern='\[,'/>
+            <substitution expression="[" />
+            <fileSet dir="${basedir}/released">
+                <include name="resource/*/*.res.json"/>
+            </fileSet>
+        </replaceregexp>
+        <replaceregexp encoding="utf-8" flags="g"  byline="true">
+            <regexp pattern=',\]'/>
+            <substitution expression="]" />
+            <fileSet dir="${basedir}/released">
+                <include name="resource/*/*.res.json"/>
+            </fileSet>
+        </replaceregexp>
+        <CompressionPNG binPath="${basedir}/tools/pngquant" params="--ext=.png --force">
+            <fileSet dir="${basedir}/released">
+                <include name="resource/**/*.png"/>
+            </fileSet>
+        </CompressionPNG>
+        <jscomp compilationLevel="simple" warning="quiet"
+                debug="false" output="${basedir}/released/src/Main.js">
+            <sources dir="${basedir}/src">
+                <file name="Main.js"/>
+            </sources>
+        </jscomp>
+    	<jscomp compilationLevel="simple" warning="quiet" debug="false" output="${basedir}/released/src/loading/Loading.js">
+			<sources dir="${basedir}">
+				<!--need_package_loading-->
+				<file name="src/loading/loadingAuto.js"/>
+				<file name="src/loading/Loading.js"/>
+				<file name="src/loading/Music.js"/>
+			</sources>
+		</jscomp>
+		<jscomp compilationLevel="simple" warning="quiet" debug="false" output="${basedir}/released/src/scene1/Scene1.js">
+			<sources dir="${basedir}">
+				<!--need_package_scene1-->
+				<file name="src/scene1/scene1Auto.js"/>
+				<file name="src/scene1/Scene1.js"/>
+				<file name="src/scene1/AlertMC.js"/>
+			</sources>
+		</jscomp>
+		<jscomp compilationLevel="simple" warning="quiet" debug="false" output="${basedir}/released/src/scene2/Scene2.js">
+			<sources dir="${basedir}">
+				<!--need_package_scene2-->
+				<file name="src/scene2/scene2Auto.js"/>
+				<file name="src/scene2/Scene2.js"/>
+				<file name="src/scene2/YellowCar.js"/>
+				<file name="src/scene2/RedCar.js"/>
+			</sources>
+		</jscomp>
+		<jscomp compilationLevel="simple" warning="quiet" debug="false" output="${basedir}/released/src/scene3/Scene3.js">
+			<sources dir="${basedir}">
+				<!--need_package_scene3-->
+				<file name="src/scene3/scene3Auto.js"/>
+				<file name="src/scene3/Scene3.js"/>
+				<file name="src/scene3/InMain.js"/>
+				<file name="src/scene3/AlertMc.js"/>
+				<file name="src/scene3/InThree.js"/>
+				<file name="src/scene3/InTwo.js"/>
+				<file name="src/scene3/InFour.js"/>
+			</sources>
+		</jscomp>
+	</target>
+</project>
