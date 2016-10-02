@@ -13,3 +13,6 @@
 # 使用的AnnieJS 引擎版本 1.0.1
 # 使用的打包构建工具 Ant
 # 使用的开发语言 js
+# 使用WebStrom 2016.3 前端开发工具
+# [案例地址:http://fg370.flash2x.org](http://fg370.flash2x.org/)
+# ![手机扫描二维码观看](http://web.flash2x.org/Public/qr/fg370.png)
