@@ -63,3 +63,6 @@ jspm_packages
 .idea
 fg307/.DS_Store
 fg307/resource/.DS_Store
+.DS_Store
+fg307/released/
+tools
